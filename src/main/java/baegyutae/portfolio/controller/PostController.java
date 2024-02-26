@@ -3,7 +3,7 @@ package baegyutae.portfolio.controller;
 import baegyutae.portfolio.dto.PostCreateDto;
 import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.dto.PostUpdateDto;
-import baegyutae.portfolio.service.impl.PostServiceImpl;
+import baegyutae.portfolio.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,33 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PostController {
 
-    private final PostServiceImpl postServiceImpl;
+    private final PostService postService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long createPost(@RequestBody PostCreateDto postCreateDto) {
-        return postServiceImpl.createPost(postCreateDto);
+        return postService.createPost(postCreateDto);
     }
 
     @GetMapping
     public List<PostResponseDto> getAllPosts() {
-        return postServiceImpl.getAllPosts();
+        return postService.getAllPosts();
     }
 
     @GetMapping("/{id}")
     public PostResponseDto getPostById(@PathVariable Long id) {
-        return postServiceImpl.getPostById(id);
+        return postService.getPostById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void updatePost(@PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto) {
-        postServiceImpl.updatePost(id, postUpdateDto);
+        postService.updatePost(id, postUpdateDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable Long id) {
-        postServiceImpl.deletePost(id);
+        postService.deletePost(id);
     }
 }
