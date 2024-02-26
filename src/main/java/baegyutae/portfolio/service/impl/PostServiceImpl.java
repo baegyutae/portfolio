@@ -36,4 +36,13 @@ public class PostServiceImpl implements PostService {
                 post.getCreatedAt(), post.getUpdatedAt()))
             .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PostResponseDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(),
+            post.getCreatedAt(), post.getUpdatedAt());
+    }
 }
