@@ -4,6 +4,7 @@ import baegyutae.portfolio.domain.model.Post;
 import baegyutae.portfolio.domain.repository.PostRepository;
 import baegyutae.portfolio.dto.PostCreateDto;
 import baegyutae.portfolio.dto.PostResponseDto;
+import baegyutae.portfolio.dto.PostUpdateDto;
 import baegyutae.portfolio.service.PostService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,5 +45,13 @@ public class PostServiceImpl implements PostService {
             .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
         return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(),
             post.getCreatedAt(), post.getUpdatedAt());
+    }
+
+    @Transactional
+    @Override
+    public void updatePost(Long id, PostUpdateDto postUpdateDto) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+        post.update(postUpdateDto.title(), postUpdateDto.content());
     }
 }
