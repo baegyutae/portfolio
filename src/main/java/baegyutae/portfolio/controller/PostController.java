@@ -1,9 +1,13 @@
 package baegyutae.portfolio.controller;
 
 import baegyutae.portfolio.dto.PostCreateDto;
+import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.service.impl.PostServiceImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,5 +25,15 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public Long createPost(@RequestBody PostCreateDto postCreateDto) {
         return postServiceImpl.createPost(postCreateDto);
+    }
+
+    @GetMapping
+    public List<PostResponseDto> getAllPosts() {
+        return postServiceImpl.getAllPosts();
+    }
+
+    @GetMapping("/{id}")
+    public PostResponseDto getPostById(@PathVariable Long id) {
+        return postServiceImpl.getPostById(id);
     }
 }
