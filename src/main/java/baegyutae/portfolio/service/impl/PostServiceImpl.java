@@ -54,4 +54,10 @@ public class PostServiceImpl implements PostService {
             .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
         post.update(postUpdateDto.title(), postUpdateDto.content());
     }
+
+    @Transactional
+    @Override
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
+    }
 }
