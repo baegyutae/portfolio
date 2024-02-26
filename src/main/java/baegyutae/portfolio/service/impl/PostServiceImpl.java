@@ -3,7 +3,10 @@ package baegyutae.portfolio.service.impl;
 import baegyutae.portfolio.domain.model.Post;
 import baegyutae.portfolio.domain.repository.PostRepository;
 import baegyutae.portfolio.dto.PostCreateDto;
+import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.service.PostService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,5 +26,14 @@ public class PostServiceImpl implements PostService {
             .build();
         postRepository.save(post);
         return post.getId();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<PostResponseDto> getAllPosts() {
+        return postRepository.findAll().stream()
+            .map(post -> new PostResponseDto(post.getId(), post.getTitle(), post.getContent(),
+                post.getCreatedAt(), post.getUpdatedAt()))
+            .collect(Collectors.toList());
     }
 }
