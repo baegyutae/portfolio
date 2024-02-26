@@ -1,9 +1,9 @@
-package baegyutae.service.impl;
+package baegyutae.portfolio.service.impl;
 
 import baegyutae.portfolio.domain.model.Post;
 import baegyutae.portfolio.domain.repository.PostRepository;
 import baegyutae.portfolio.dto.PostCreateDto;
-import baegyutae.service.PostService;
+import baegyutae.portfolio.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

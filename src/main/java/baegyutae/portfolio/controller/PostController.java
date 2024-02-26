@@ -1,7 +1,7 @@
 package baegyutae.portfolio.controller;
 
 import baegyutae.portfolio.dto.PostCreateDto;
-import baegyutae.service.impl.PostServiceImpl;
+import baegyutae.portfolio.service.impl.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

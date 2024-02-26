@@ -1,4 +1,4 @@
-package baegyutae.service;
+package baegyutae.portfolio.service;
 
 import baegyutae.portfolio.dto.PostCreateDto;
 
