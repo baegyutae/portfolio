@@ -39,4 +39,22 @@ class PostRepositoryTest {
         assertThat(foundPost).isPresent();
         assertThat(foundPost.get().getTitle()).isEqualTo("테스트 제목");
     }
+
+    @Test
+    void updatePostTest() {
+        // 게시글 수정 테스트
+        Post post = Post.builder()
+            .title("테스트 제목")
+            .content("테스트 내용")
+            .build();
+        Post savedPost = postRepository.save(post);
+
+        // 게시글 수정
+        savedPost.update("수정된 제목", "수정된 내용");
+        postRepository.save(savedPost);
+
+        Post updatedPost = postRepository.findById(savedPost.getId()).orElseThrow();
+        assertThat(updatedPost.getTitle()).isEqualTo("수정된 제목");
+        assertThat(updatedPost.getContent()).isEqualTo("수정된 내용");
+    }
 }
