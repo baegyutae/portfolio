@@ -57,4 +57,16 @@ class PostRepositoryTest {
         assertThat(updatedPost.getTitle()).isEqualTo("수정된 제목");
         assertThat(updatedPost.getContent()).isEqualTo("수정된 내용");
     }
+
+    @Test
+    void deletePostTest() {
+        // 게시글 삭제 테스트
+        Post post = new Post("테스트 제목", "테스트 내용");
+        Post savedPost = postRepository.save(post);
+
+        postRepository.delete(savedPost);
+
+        Optional<Post> deletedPost = postRepository.findById(savedPost.getId());
+        assertThat(deletedPost).isEmpty();
+    }
 }
