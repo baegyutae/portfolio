@@ -5,5 +5,5 @@ import java.util.Date;
 
 public interface FileService {
 
-    URL generatePresignedUrl(String bucketName, String obkectKey, Date expiration);
+    URL generatePresignedUrl(String bucketName, String objectKey, Date expiration);
 }
