@@ -20,20 +20,29 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public Long createPost(PostCreateDto postCreateDto) {
+    public PostResponseDto createPost(PostCreateDto postCreateDto) {
         Post post = Post.builder()
             .title(postCreateDto.title())
             .content(postCreateDto.content())
+            .imageUrl(postCreateDto.imageUrl())
             .build();
-        postRepository.save(post);
-        return post.getId();
+        post = postRepository.save(post);
+
+        return new PostResponseDto(
+            post.getId(),
+            post.getTitle(),
+            post.getContent(),
+            post.getImageUrl(),
+            post.getCreatedAt(),
+            post.getUpdatedAt()
+        );
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<PostResponseDto> getAllPosts() {
         return postRepository.findAll().stream()
-            .map(post -> new PostResponseDto(post.getId(), post.getTitle(), post.getContent(),
+            .map(post -> new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImageUrl(),
                 post.getCreatedAt(), post.getUpdatedAt()))
             .collect(Collectors.toList());
     }
@@ -43,7 +52,7 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto getPostById(Long id) {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
-        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(),
+        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImageUrl(),
             post.getCreatedAt(), post.getUpdatedAt());
     }
 
@@ -52,7 +61,7 @@ public class PostServiceImpl implements PostService {
     public void updatePost(Long id, PostUpdateDto postUpdateDto) {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
-        post.update(postUpdateDto.title(), postUpdateDto.content());
+        post.update(postUpdateDto.title(), postUpdateDto.content(), postUpdateDto.imageUrl());
     }
 
     @Transactional
