@@ -8,7 +8,6 @@ import baegyutae.portfolio.service.S3Service;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +41,20 @@ public class PostController {
         @RequestPart(value = "file", required = false) MultipartFile file) {
 
         // 파일이 제공되었는지 확인
-        String fileUrl = null;
-        if (file != null && !file.isEmpty()) {
-            fileUrl = s3Service.uploadFile(file);
+        String imageUrl = null;
+        if (file != null) {
+            imageUrl = s3Service.uploadFile(file);
         }
 
+        PostCreateDto newPostCreateDto = new PostCreateDto(
+            postCreateDto.title(),
+            postCreateDto.content(),
+            imageUrl
+        );
+
         // 게시글과 파일 URL 저장 로직
-        Long postId = postService.createPost(postCreateDto);
-        return ResponseEntity.ok().body(Map.of("postId", postId, "fileUrl", fileUrl));
+        PostResponseDto postResponseDto = postService.createPost(newPostCreateDto);
+        return ResponseEntity.ok(postResponseDto);
     }
 
     @GetMapping
