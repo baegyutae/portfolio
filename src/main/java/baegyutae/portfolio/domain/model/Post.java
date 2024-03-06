@@ -28,17 +28,21 @@ public class Post {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private String imageUrl;
+
     @Builder
-    public Post(String title, String content) {
+    public Post(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.imageUrl = imageUrl;
     }
 
-    public void update(String title, String content) {
+    public void update(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
         this.updatedAt = LocalDateTime.now();
     }
 }
