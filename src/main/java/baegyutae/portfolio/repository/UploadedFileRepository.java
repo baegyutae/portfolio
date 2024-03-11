@@ -1,6 +1,6 @@
-package baegyutae.portfolio.domain.repository;
+package baegyutae.portfolio.repository;
 
-import baegyutae.portfolio.domain.model.UploadedFile;
+import baegyutae.portfolio.entity.UploadedFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UploadedFileRepository extends JpaRepository <UploadedFile, Long> {

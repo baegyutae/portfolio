@@ -1,7 +1,7 @@
 package baegyutae.portfolio.service.impl;
 
-import baegyutae.portfolio.domain.model.Post;
-import baegyutae.portfolio.domain.repository.PostRepository;
+import baegyutae.portfolio.entity.Post;
+import baegyutae.portfolio.repository.PostRepository;
 import baegyutae.portfolio.dto.PostCreateDto;
 import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.dto.PostUpdateDto;

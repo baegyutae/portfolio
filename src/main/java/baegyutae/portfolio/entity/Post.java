@@ -1,4 +1,4 @@
-package baegyutae.portfolio.domain.model;
+package baegyutae.portfolio.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,7 +1,7 @@
 package baegyutae.portfolio.service.impl;
 
-import baegyutae.portfolio.domain.model.UploadedFile;
-import baegyutae.portfolio.domain.repository.UploadedFileRepository;
+import baegyutae.portfolio.entity.UploadedFile;
+import baegyutae.portfolio.repository.UploadedFileRepository;
 import baegyutae.portfolio.service.UploadedFileService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;

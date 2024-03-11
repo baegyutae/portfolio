@@ -1,6 +1,6 @@
 package baegyutae.portfolio.controller;
 
-import baegyutae.portfolio.domain.model.UploadedFile;
+import baegyutae.portfolio.entity.UploadedFile;
 import baegyutae.portfolio.dto.FileUploadRequest;
 import baegyutae.portfolio.service.S3Service;
 import baegyutae.portfolio.service.UploadedFileService;
