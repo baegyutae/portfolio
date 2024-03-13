@@ -4,6 +4,7 @@ import baegyutae.portfolio.dto.SignupRequestDto;
 import baegyutae.portfolio.dto.SignupResponseDto;
 import baegyutae.portfolio.dto.UserLoginDto;
 import baegyutae.portfolio.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponseDto> registerUser(
-        @RequestBody SignupRequestDto signupRequestDto) {
+        @Valid @RequestBody SignupRequestDto signupRequestDto) {
         SignupResponseDto responseDto = userService.signupUser(signupRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
