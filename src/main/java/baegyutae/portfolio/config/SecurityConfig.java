@@ -61,7 +61,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
             authorizeHttpRequests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers("/login/**").permitAll()
+                .requestMatchers("/api/user/signup/**").permitAll()
+                .requestMatchers("/api/user/login/**").permitAll()
                 .anyRequest().authenticated()
         );
 
