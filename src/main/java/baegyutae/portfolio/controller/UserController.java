@@ -1,9 +1,11 @@
 package baegyutae.portfolio.controller;
 
+import baegyutae.portfolio.dto.SignupRequestDto;
+import baegyutae.portfolio.dto.SignupResponseDto;
 import baegyutae.portfolio.dto.UserLoginDto;
-import baegyutae.portfolio.dto.UserRegistrationDto;
 import baegyutae.portfolio.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +19,11 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationDto registrationDto) {
-        return ResponseEntity.ok(userService.registerUser(registrationDto));
+    @PostMapping("/signup")
+    public ResponseEntity<SignupResponseDto> registerUser(
+        @RequestBody SignupRequestDto signupRequestDto) {
+        SignupResponseDto responseDto = userService.signupUser(signupRequestDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
