@@ -23,7 +23,7 @@ public class JwtTokenUtil {
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date())
             .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .signWith(SignatureAlgorithm.HS512, secretKey.getBytes())
             .compact();
     }
 
@@ -33,11 +33,11 @@ public class JwtTokenUtil {
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody().getSubject();
     }
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+        final Date expiration = Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody().getExpiration();
         return expiration.before(new Date());
     }
 }
