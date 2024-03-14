@@ -5,7 +5,9 @@ import baegyutae.portfolio.dto.SignupResponseDto;
 import baegyutae.portfolio.dto.UserLoginDto;
 import baegyutae.portfolio.service.UserService;
 import jakarta.validation.Valid;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +31,16 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDto loginDto) {
-        return ResponseEntity.ok(userService.loginUser(loginDto));
+        try {
+            String token = userService.loginUser(loginDto);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + token); // JWT 토큰을 헤더에 추가
+
+            return new ResponseEntity<>(headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "로그인 실패"));
+        }
     }
 
 }
