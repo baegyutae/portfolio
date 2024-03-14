@@ -5,12 +5,15 @@ import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.dto.PostUpdateDto;
 import baegyutae.portfolio.service.PostService;
 import baegyutae.portfolio.service.S3Service;
+import jakarta.validation.Valid;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,10 +35,11 @@ public class PostController {
     private final PostService postService;
     private final S3Service s3Service;
 
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createPost(
-        @RequestPart("postCreateDto") PostCreateDto postCreateDto,
+        @AuthenticationPrincipal UserDetails userDetails,
+        @Valid @RequestPart("postCreateDto") PostCreateDto postCreateDto,
         @RequestPart(value = "file", required = false) MultipartFile file) {
 
         // 파일이 제공되었는지 확인
@@ -56,24 +60,32 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostResponseDto> getAllPosts() {
+    public List<PostResponseDto> getAllPosts(
+        @AuthenticationPrincipal UserDetails userDetails
+    ) {
         return postService.getAllPosts();
     }
 
     @GetMapping("/{id}")
-    public PostResponseDto getPostById(@PathVariable Long id) {
+    public PostResponseDto getPostById(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long id) {
         return postService.getPostById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updatePost(@PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto) {
+    public void updatePost(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto) {
         postService.updatePost(id, postUpdateDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable Long id) {
+    public void deletePost(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long id) {
         postService.deletePost(id);
     }
 
