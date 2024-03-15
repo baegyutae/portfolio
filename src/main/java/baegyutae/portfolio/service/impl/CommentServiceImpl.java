@@ -2,6 +2,7 @@ package baegyutae.portfolio.service.impl;
 
 import baegyutae.portfolio.dto.CommentCreateRequestDto;
 import baegyutae.portfolio.dto.CommentResponseDto;
+import baegyutae.portfolio.dto.CommentUpdateRequestDto;
 import baegyutae.portfolio.entity.Comment;
 import baegyutae.portfolio.entity.Post;
 import baegyutae.portfolio.entity.User;
@@ -11,7 +12,6 @@ import baegyutae.portfolio.repository.UserRepository;
 import baegyutae.portfolio.service.CommentService;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,4 +66,25 @@ public class CommentServiceImpl implements CommentService {
                 comment.getUpdatedAt()))
             .toList();
     }
+
+    @Override
+    @Transactional
+    public CommentResponseDto updateComment(Long commentId, CommentUpdateRequestDto requestDto) {
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(
+                () -> new IllegalArgumentException("Comment not found with id: " + commentId));
+
+        comment.updateContent(requestDto.content());
+
+        return new CommentResponseDto(
+            comment.getId(),
+            comment.getContent(),
+            comment.getPost().getId(),
+            comment.getUser().getUsername(),
+            comment.getCreatedAt(),
+            comment.getUpdatedAt()
+        );
+    }
+
+
 }
