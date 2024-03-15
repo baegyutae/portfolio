@@ -2,12 +2,14 @@ package baegyutae.portfolio.controller;
 
 import baegyutae.portfolio.dto.CommentCreateRequestDto;
 import baegyutae.portfolio.dto.CommentResponseDto;
+import baegyutae.portfolio.dto.CommentUpdateRequestDto;
 import baegyutae.portfolio.service.CommentService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,4 +39,14 @@ public class CommentController {
         List<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId);
         return ResponseEntity.ok(comments);
     }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<CommentResponseDto> updateComment(
+        @PathVariable Long postId,
+        @PathVariable Long commentId,
+        @RequestBody CommentUpdateRequestDto requestDto) {
+        CommentResponseDto updatedComment = commentService.updateComment(commentId, requestDto);
+        return ResponseEntity.ok(updatedComment);
+    }
+
 }
