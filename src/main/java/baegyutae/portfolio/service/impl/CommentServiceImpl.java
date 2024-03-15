@@ -10,6 +10,8 @@ import baegyutae.portfolio.repository.PostRepository;
 import baegyutae.portfolio.repository.UserRepository;
 import baegyutae.portfolio.service.CommentService;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,19 @@ public class CommentServiceImpl implements CommentService {
             savedComment.getCreatedAt(),
             savedComment.getUpdatedAt()
         );
+    }
+
+    @Override
+    public List<CommentResponseDto> findAllCommentsByPostId(Long postId) {
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        return comments.stream()
+            .map(comment -> new CommentResponseDto(
+                comment.getId(),
+                comment.getContent(),
+                comment.getPost().getId(),
+                comment.getUser().getUsername(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()))
+            .toList();
     }
 }
