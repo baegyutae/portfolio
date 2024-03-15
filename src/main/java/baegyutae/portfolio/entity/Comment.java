@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 public class Comment {
 
     @Id
@@ -42,4 +39,13 @@ public class Comment {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Builder
+    public Comment(String content, Post post, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.content = content;
+        this.post = post;
+        this.user = user;
+        this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
+        this.updatedAt = updatedAt != null ? updatedAt : LocalDateTime.now();
+    }
 }
