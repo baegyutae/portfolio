@@ -20,6 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         baegyutae.portfolio.entity.User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException("사용자의 이름을 찾을 수 없습니다." + username));
 
-        return new User(user.getUsername(), user.getPassword(), Collections.emptyList());
+        return new UserDetailsImpl(user);
     }
 }
