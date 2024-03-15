@@ -8,10 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class Comment {
 
     @Id
@@ -36,19 +37,9 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
-
-    @Builder
-    public Comment(Long id, String content, Post post, User user, Date createdAt, Date updatedAt) {
-        this.id = id;
-        this.content = content;
-        this.post = post;
-        this.user = user;
-        this.createdAt = createdAt != null ? createdAt : new Date();
-        this.updatedAt = updatedAt != null ? updatedAt : new Date();
-    }
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }
