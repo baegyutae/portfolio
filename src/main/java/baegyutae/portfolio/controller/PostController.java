@@ -73,12 +73,26 @@ public class PostController {
         return postService.getPostById(id);
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void updatePost(
-        @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long id, @RequestBody PostUpdateDto postUpdateDto) {
-        postService.updatePost(id, postUpdateDto);
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> updatePost(
+        @PathVariable Long id,
+        @Valid @RequestPart("postUpdateDto") PostUpdateDto postUpdateDto,
+        @RequestPart(value = "file", required = false) MultipartFile file) {
+
+        String imageUrl = null;
+        if (file != null && !file.isEmpty()) {
+            imageUrl = s3Service.uploadFile(file);
+        }
+
+        PostUpdateDto updatedPostUpdateDto = new PostUpdateDto(
+            postUpdateDto.title(),
+            postUpdateDto.content(),
+            imageUrl != null ? imageUrl : postUpdateDto.imageUrl() // 새 이미지 URL 또는 기존 URL 사용
+        );
+
+        postService.updatePost(id, updatedPostUpdateDto);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
