@@ -48,4 +48,9 @@ public class Comment {
         this.createdAt = createdAt != null ? createdAt : LocalDateTime.now();
         this.updatedAt = updatedAt != null ? updatedAt : LocalDateTime.now();
     }
+
+    @Builder
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
