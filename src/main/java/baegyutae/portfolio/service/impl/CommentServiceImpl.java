@@ -13,6 +13,8 @@ import baegyutae.portfolio.service.CommentService;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,4 +96,16 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.delete(comment);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Page<CommentResponseDto> findAllCommentsByPostId(Long postId, Pageable pageable) {
+        return commentRepository.findByPostId(postId, pageable)
+            .map(comment -> new CommentResponseDto(
+                comment.getId(),
+                comment.getContent(),
+                comment.getPost().getId(),
+                comment.getUser().getUsername(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()));
+    }
 }
