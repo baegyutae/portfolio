@@ -9,6 +9,9 @@ import baegyutae.portfolio.service.CommentService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,4 +70,10 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public ResponseEntity<Page<CommentResponseDto>> getAllCommentsByPostId(
+        @PathVariable Long postId, @PageableDefault(size = 5) Pageable pageable) {
+        Page<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId, pageable);
+        return ResponseEntity.ok(comments);
+    }
 }
