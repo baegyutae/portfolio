@@ -11,7 +11,6 @@ import baegyutae.portfolio.repository.PostRepository;
 import baegyutae.portfolio.repository.UserRepository;
 import baegyutae.portfolio.service.CommentService;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,18 +54,17 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<CommentResponseDto> findAllCommentsByPostId(Long postId) {
-        List<Comment> comments = commentRepository.findByPostId(postId);
-        return comments.stream()
+    public Page<CommentResponseDto> findAllCommentsByPostId(Long postId, Pageable pageable) {
+        return commentRepository.findByPostId(postId, pageable)
             .map(comment -> new CommentResponseDto(
                 comment.getId(),
                 comment.getContent(),
                 comment.getPost().getId(),
                 comment.getUser().getUsername(),
                 comment.getCreatedAt(),
-                comment.getUpdatedAt()))
-            .toList();
+                comment.getUpdatedAt()));
     }
 
     @Override
@@ -94,18 +92,5 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(() -> new IllegalArgumentException("Comment not found with id: " + commentId));
         commentRepository.delete(comment);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Page<CommentResponseDto> findAllCommentsByPostId(Long postId, Pageable pageable) {
-        return commentRepository.findByPostId(postId, pageable)
-            .map(comment -> new CommentResponseDto(
-                comment.getId(),
-                comment.getContent(),
-                comment.getPost().getId(),
-                comment.getUser().getUsername(),
-                comment.getCreatedAt(),
-                comment.getUpdatedAt()));
     }
 }

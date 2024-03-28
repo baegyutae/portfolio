@@ -7,7 +7,6 @@ import baegyutae.portfolio.entity.User;
 import baegyutae.portfolio.security.UserDetailsImpl;
 import baegyutae.portfolio.service.CommentService;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,9 +47,9 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> getAllCommentsByPostId(
-        @PathVariable Long postId) {
-        List<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId);
+    public ResponseEntity<Page<CommentResponseDto>> getAllCommentsByPostId(
+        @PathVariable Long postId, @PageableDefault(size = 5) Pageable pageable) {
+        Page<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId, pageable);
         return ResponseEntity.ok(comments);
     }
 
@@ -68,12 +67,5 @@ public class CommentController {
         @PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<CommentResponseDto>> getAllCommentsByPostId(
-        @PathVariable Long postId, @PageableDefault(size = 5) Pageable pageable) {
-        Page<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId, pageable);
-        return ResponseEntity.ok(comments);
     }
 }
