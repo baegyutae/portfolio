@@ -6,6 +6,7 @@ import baegyutae.portfolio.dto.CommentUpdateRequestDto;
 import baegyutae.portfolio.entity.Comment;
 import baegyutae.portfolio.entity.Post;
 import baegyutae.portfolio.entity.User;
+import baegyutae.portfolio.exception.UserNotAuthorizedException;
 import baegyutae.portfolio.repository.CommentRepository;
 import baegyutae.portfolio.repository.PostRepository;
 import baegyutae.portfolio.repository.UserRepository;
@@ -69,10 +70,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentUpdateRequestDto requestDto) {
+    public CommentResponseDto updateComment(Long commentId, CommentUpdateRequestDto requestDto,
+        Long userId) {
         Comment comment = commentRepository.findById(commentId)
             .orElseThrow(
                 () -> new IllegalArgumentException("Comment not found with id: " + commentId));
+
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizedException("User not authorized to update this comment");
+        }
 
         comment.updateContent(requestDto.content());
 
@@ -88,9 +94,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
-            .orElseThrow(() -> new IllegalArgumentException("Comment not found with id: " + commentId));
+            .orElseThrow(
+                () -> new IllegalArgumentException("Comment not found with id: " + commentId));
+
+        if (!comment.getUser().getId().equals(userId)) {
+            throw new UserNotAuthorizedException("User not authorized to delete this comment");
+        }
+
         commentRepository.delete(comment);
     }
 }
