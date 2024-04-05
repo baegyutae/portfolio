@@ -1,10 +1,10 @@
 package baegyutae.portfolio.controller;
 
+import static baegyutae.portfolio.util.SecurityUtils.getCurrentUserId;
+
 import baegyutae.portfolio.dto.CommentCreateRequestDto;
 import baegyutae.portfolio.dto.CommentResponseDto;
 import baegyutae.portfolio.dto.CommentUpdateRequestDto;
-import baegyutae.portfolio.entity.User;
-import baegyutae.portfolio.security.UserDetailsImpl;
 import baegyutae.portfolio.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -33,15 +32,10 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<?> createComment(
         @PathVariable Long postId,
-        @Valid @RequestBody CommentCreateRequestDto requestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails
+        @Valid @RequestBody CommentCreateRequestDto requestDto
     ) {
+        Long userId = getCurrentUserId();
 
-        // UserDetailsImpl에서 사용자 정보 추출
-        User user = userDetails.getUser();
-        Long userId = user.getId(); // 혹은 userDetails.getId()와 같이 직접 ID를 얻는 메서드가 구현되어 있을 수 있음
-
-        // 서비스 계층에 사용자 정보와 함께 댓글 생성 요청
         CommentResponseDto responseDto = commentService.createComment(postId, userId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -49,7 +43,8 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<Page<CommentResponseDto>> getAllCommentsByPostId(
         @PathVariable Long postId, @PageableDefault(size = 5) Pageable pageable) {
-        Page<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId, pageable);
+        Page<CommentResponseDto> comments = commentService.findAllCommentsByPostId(postId,
+            pageable);
         return ResponseEntity.ok(comments);
     }
 
