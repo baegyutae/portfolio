@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UploadedFile {
+public class UploadedFile extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +20,10 @@ public class UploadedFile {
 
     private String fileName;
     private String fileUrl;
-    private LocalDateTime uploadTime;
 
     @Builder
-    public UploadedFile(String fileName, String fileUrl, LocalDateTime uploadTime) {
+    public UploadedFile(String fileName, String fileUrl) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
-        this.uploadTime = uploadTime;
     }
 }
