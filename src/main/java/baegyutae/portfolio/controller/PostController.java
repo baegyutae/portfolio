@@ -7,8 +7,6 @@ import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.PostService;
 import baegyutae.portfolio.service.S3Service;
 import jakarta.validation.Valid;
-import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -104,12 +101,5 @@ public class PostController {
         @PathVariable Long id) {
         postService.deletePost(id);
         return ResponseEntity.ok(ApiResponse.success());
-    }
-
-    @GetMapping("/generate-presigned-url")
-    public ResponseEntity<String> generatePresignedUrl(@RequestParam String objectKey) {
-        Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 60); // 예: 1시간 후 만료
-        URL presignedUrl = s3Service.generatePresignedUrl(objectKey, expiration);
-        return ResponseEntity.ok(presignedUrl.toString());
     }
 }
