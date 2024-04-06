@@ -3,6 +3,7 @@ package baegyutae.portfolio.controller;
 import baegyutae.portfolio.dto.PostCreateDto;
 import baegyutae.portfolio.dto.PostResponseDto;
 import baegyutae.portfolio.dto.PostUpdateDto;
+import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.PostService;
 import baegyutae.portfolio.service.S3Service;
 import jakarta.validation.Valid;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -37,14 +37,14 @@ public class PostController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createPost(
+    public ResponseEntity<ApiResponse<PostResponseDto>> createPost(
         @AuthenticationPrincipal UserDetails userDetails,
         @Valid @RequestPart("postCreateDto") PostCreateDto postCreateDto,
         @RequestPart(value = "file", required = false) MultipartFile file) {
 
         // 파일이 제공되었는지 확인
         String imageUrl = null;
-        if (file != null) {
+        if (file != null && !file.isEmpty()) {
             imageUrl = s3Service.uploadFile(file);
         }
 
@@ -56,25 +56,26 @@ public class PostController {
 
         // 게시글과 파일 URL 저장 로직
         PostResponseDto postResponseDto = postService.createPost(newPostCreateDto);
-        return ResponseEntity.ok(postResponseDto);
+        return ResponseEntity.ok(ApiResponse.success(postResponseDto));
     }
 
     @GetMapping
-    public List<PostResponseDto> getAllPosts(
-        @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        return postService.getAllPosts();
+    public ResponseEntity<ApiResponse<List<PostResponseDto>>> getAllPosts(
+        @AuthenticationPrincipal UserDetails userDetails) {
+        List<PostResponseDto> posts = postService.getAllPosts();
+        return ResponseEntity.ok(ApiResponse.success(posts));
     }
 
     @GetMapping("/{id}")
-    public PostResponseDto getPostById(
+    public ResponseEntity<ApiResponse<PostResponseDto>> getPostById(
         @AuthenticationPrincipal UserDetails userDetails,
         @PathVariable Long id) {
-        return postService.getPostById(id);
+        PostResponseDto post = postService.getPostById(id);
+        return ResponseEntity.ok(ApiResponse.success(post));
     }
 
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> updatePost(
+    public ResponseEntity<ApiResponse<PostResponseDto>> updatePost(
         @PathVariable Long id,
         @Valid @RequestPart("postUpdateDto") PostUpdateDto postUpdateDto,
         @RequestPart(value = "file", required = false) MultipartFile file) {
@@ -92,15 +93,17 @@ public class PostController {
 
         postService.updatePost(id, updatedPostUpdateDto);
 
-        return ResponseEntity.ok().build();
+        PostResponseDto updatedPost = postService.getPostById(id);
+        return ResponseEntity.ok(ApiResponse.success(updatedPost));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(
+    public ResponseEntity<ApiResponse<Void>> deletePost(
         @AuthenticationPrincipal UserDetails userDetails,
         @PathVariable Long id) {
         postService.deletePost(id);
+        return ResponseEntity.ok(ApiResponse.success());
     }
 
     @GetMapping("/generate-presigned-url")
