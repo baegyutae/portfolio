@@ -6,7 +6,7 @@ import baegyutae.portfolio.dto.UserLoginDto;
 import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.UserService;
 import jakarta.validation.Valid;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,20 +24,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> registerUser(
+    public ResponseEntity<ApiResponse<SignupResponseDto>> signupUser(
         @Valid @RequestBody SignupRequestDto signupRequestDto) {
         SignupResponseDto responseDto = userService.signupUser(signupRequestDto);
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(responseDto));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<Map<String, String>>> loginUser(
         @RequestBody UserLoginDto loginDto) throws Exception {
         String token = userService.loginUser(loginDto);
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        Map<String, String> tokenResponse = Collections.singletonMap("token", token);
+        return ResponseEntity.ok(ApiResponse.success(tokenResponse));
     }
-
-
 }
