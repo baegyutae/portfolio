@@ -88,12 +88,11 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<ApiResponse<Void>> deletePost(
         @AuthenticationPrincipal UserDetails userDetails,
         @PathVariable Long id) {
         postService.deletePost(id);
-        return ResponseEntity.ok(ApiResponse.success());
+        return ResponseEntity.noContent().build();
     }
 
     private String uploadFile(MultipartFile file) {
