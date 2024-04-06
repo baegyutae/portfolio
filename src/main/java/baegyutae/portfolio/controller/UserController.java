@@ -3,6 +3,7 @@ package baegyutae.portfolio.controller;
 import baegyutae.portfolio.dto.SignupRequestDto;
 import baegyutae.portfolio.dto.SignupResponseDto;
 import baegyutae.portfolio.dto.UserLoginDto;
+import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.UserService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -30,19 +31,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody UserLoginDto loginDto) {
-        try {
-            String token = userService.loginUser(loginDto);
-
-            // 토큰을 Map에 추가
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);
-
-            // 헤더 없이 본문에 응답
-            return ResponseEntity.ok().body(response);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "로그인 실패"));
-        }
+    public ResponseEntity<ApiResponse<Map<String, String>>> loginUser(
+        @RequestBody UserLoginDto loginDto) throws Exception {
+        String token = userService.loginUser(loginDto);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 
