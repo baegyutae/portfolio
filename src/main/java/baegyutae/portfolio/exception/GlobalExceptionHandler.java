@@ -35,4 +35,11 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError("내부 서버 오류가 발생했습니다.", Collections.singletonList("오류가 발생했습니다."));
         return new ResponseEntity<>(ApiResponse.error(apiError), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(LoginFailureException.class)
+    public ResponseEntity<ApiResponse<Object>> handleLoginFailure(LoginFailureException ex) {
+        ApiError apiError = new ApiError("로그인 실패", Collections.singletonList(ex.getMessage()));
+        ApiResponse<Object> apiResponse = ApiResponse.error(apiError);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
 }
