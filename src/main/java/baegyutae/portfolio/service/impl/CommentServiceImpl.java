@@ -39,8 +39,6 @@ public class CommentServiceImpl implements CommentService {
             .content(requestDto.content())
             .post(post)
             .user(user)
-            .createdAt(LocalDateTime.now())
-            .updatedAt(LocalDateTime.now())
             .build();
 
         Comment savedComment = commentRepository.save(newComment);

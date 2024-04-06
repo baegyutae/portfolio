@@ -18,7 +18,6 @@ public class UploadedFileServiceImpl implements UploadedFileService {
         UploadedFile uploadedFile = UploadedFile.builder()
             .fileName(fileName)
             .fileUrl(fileUrl)
-            .uploadTime(LocalDateTime.now())
             .build();
         return uploadedFileRepository.save(uploadedFile);
     }
