@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,13 @@ public class User extends BaseTime {
     @Email(message = "유효한 이메일 주소를 입력해주세요.")
     @NotBlank(message = "이메일은 필수입니다.")
     private String email;
+
+    @Builder
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
 
     @Override
     public boolean equals(Object o) {
