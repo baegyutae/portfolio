@@ -3,6 +3,7 @@ package baegyutae.portfolio.exception;
 import baegyutae.portfolio.response.ApiError;
 import baegyutae.portfolio.response.ApiResponse;
 import java.util.Collections;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,30 +14,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotAuthenticatedException.class)
     public ResponseEntity<ApiResponse<ApiError>> handleUserNotAuthenticated(UserNotAuthenticatedException ex) {
-        ApiError apiError = ApiError.builder()
-            .message("인증되지 않은 사용자입니다.")
-            .errors(Collections.singletonList(ex.getMessage()))
-            .build();
+        ApiError apiError = new ApiError("인증되지 않은 사용자입니다.", Collections.singletonList(ex.getMessage()));
+        return new ResponseEntity<>(ApiResponse.error(apiError), HttpStatus.UNAUTHORIZED);
+    }
 
-        ApiResponse<ApiError> response = ApiResponse.<ApiError>builder()
-            .data(apiError)
-            .build();
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleResourceNotFound(ResourceNotFoundException ex) {
+        ApiResponse<Object> response = ApiResponse.error(new ApiError("리소스를 찾을 수 없습니다.", List.of(ex.getMessage())));
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
-        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(DataValidationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDataValidationException(DataValidationException ex) {
+        ApiResponse<Object> response = ApiResponse.error(new ApiError("데이터 검증 실패", List.of(ex.getMessage())));
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<ApiError>> handleAllExceptions(
-        Exception ex) {
-
-        ApiError apiError = ApiError.builder()
-            .message(ex.getMessage())
-            .errors(Collections.singletonList("오류가 발생했습니다."))
-            .build();
-
-        ApiResponse<ApiError> response = ApiResponse.<ApiError>builder()
-            .data(apiError)
-            .build();
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ApiResponse<ApiError>> handleAllExceptions(Exception ex) {
+        ApiError apiError = new ApiError("내부 서버 오류가 발생했습니다.", Collections.singletonList("오류가 발생했습니다."));
+        return new ResponseEntity<>(ApiResponse.error(apiError), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
