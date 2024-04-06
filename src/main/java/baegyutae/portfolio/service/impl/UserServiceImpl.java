@@ -1,8 +1,8 @@
 package baegyutae.portfolio.service.impl;
 
-import baegyutae.portfolio.dto.SignupRequestDto;
-import baegyutae.portfolio.dto.SignupResponseDto;
-import baegyutae.portfolio.dto.UserLoginDto;
+import baegyutae.portfolio.dto.user.SignupRequestDto;
+import baegyutae.portfolio.dto.user.SignupResponseDto;
+import baegyutae.portfolio.dto.user.UserLoginDto;
 import baegyutae.portfolio.entity.User;
 import baegyutae.portfolio.repository.UserRepository;
 import baegyutae.portfolio.security.JwtTokenUtil;

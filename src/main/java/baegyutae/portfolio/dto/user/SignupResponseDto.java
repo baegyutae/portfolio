@@ -1,4 +1,4 @@
-package baegyutae.portfolio.dto;
+package baegyutae.portfolio.dto.user;
 
 public record SignupResponseDto(
     Long id,

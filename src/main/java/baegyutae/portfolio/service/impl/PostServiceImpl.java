@@ -2,9 +2,9 @@ package baegyutae.portfolio.service.impl;
 
 import baegyutae.portfolio.entity.Post;
 import baegyutae.portfolio.repository.PostRepository;
-import baegyutae.portfolio.dto.PostCreateDto;
-import baegyutae.portfolio.dto.PostResponseDto;
-import baegyutae.portfolio.dto.PostUpdateDto;
+import baegyutae.portfolio.dto.post.PostCreateDto;
+import baegyutae.portfolio.dto.post.PostResponseDto;
+import baegyutae.portfolio.dto.post.PostUpdateDto;
 import baegyutae.portfolio.service.PostService;
 import java.util.List;
 import java.util.stream.Collectors;

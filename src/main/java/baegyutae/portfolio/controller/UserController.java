@@ -1,8 +1,8 @@
 package baegyutae.portfolio.controller;
 
-import baegyutae.portfolio.dto.SignupRequestDto;
-import baegyutae.portfolio.dto.SignupResponseDto;
-import baegyutae.portfolio.dto.UserLoginDto;
+import baegyutae.portfolio.dto.user.SignupRequestDto;
+import baegyutae.portfolio.dto.user.SignupResponseDto;
+import baegyutae.portfolio.dto.user.UserLoginDto;
 import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.UserService;
 import jakarta.validation.Valid;

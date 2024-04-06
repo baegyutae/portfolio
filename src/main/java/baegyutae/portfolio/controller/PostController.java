@@ -1,8 +1,8 @@
 package baegyutae.portfolio.controller;
 
-import baegyutae.portfolio.dto.PostCreateDto;
-import baegyutae.portfolio.dto.PostResponseDto;
-import baegyutae.portfolio.dto.PostUpdateDto;
+import baegyutae.portfolio.dto.post.PostCreateDto;
+import baegyutae.portfolio.dto.post.PostResponseDto;
+import baegyutae.portfolio.dto.post.PostUpdateDto;
 import baegyutae.portfolio.response.ApiResponse;
 import baegyutae.portfolio.service.PostService;
 import baegyutae.portfolio.service.S3Service;

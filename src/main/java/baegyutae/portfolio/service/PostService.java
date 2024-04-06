@@ -1,8 +1,8 @@
 package baegyutae.portfolio.service;
 
-import baegyutae.portfolio.dto.PostCreateDto;
-import baegyutae.portfolio.dto.PostResponseDto;
-import baegyutae.portfolio.dto.PostUpdateDto;
+import baegyutae.portfolio.dto.post.PostCreateDto;
+import baegyutae.portfolio.dto.post.PostResponseDto;
+import baegyutae.portfolio.dto.post.PostUpdateDto;
 import java.util.List;
 
 public interface PostService {

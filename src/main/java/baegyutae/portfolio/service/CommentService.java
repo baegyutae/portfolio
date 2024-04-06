@@ -1,8 +1,8 @@
 package baegyutae.portfolio.service;
 
-import baegyutae.portfolio.dto.CommentCreateRequestDto;
-import baegyutae.portfolio.dto.CommentResponseDto;
-import baegyutae.portfolio.dto.CommentUpdateRequestDto;
+import baegyutae.portfolio.dto.comment.CommentCreateRequestDto;
+import baegyutae.portfolio.dto.comment.CommentResponseDto;
+import baegyutae.portfolio.dto.comment.CommentUpdateRequestDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

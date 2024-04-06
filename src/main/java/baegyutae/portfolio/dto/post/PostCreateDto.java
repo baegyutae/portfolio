@@ -1,4 +1,4 @@
-package baegyutae.portfolio.dto;
+package baegyutae.portfolio.dto.post;
 
 public record PostCreateDto(
     String title,

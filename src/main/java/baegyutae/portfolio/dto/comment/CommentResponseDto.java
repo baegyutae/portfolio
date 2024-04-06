@@ -1,12 +1,12 @@
-package baegyutae.portfolio.dto;
+package baegyutae.portfolio.dto.comment;
 
 import java.time.LocalDateTime;
 
-public record PostResponseDto(
+public record CommentResponseDto(
     Long id,
-    String title,
     String content,
-    String imageUrl,
+    Long postId,
+    String username,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
