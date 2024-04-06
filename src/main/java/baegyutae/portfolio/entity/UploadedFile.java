@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
@@ -29,9 +28,4 @@ public class UploadedFile extends BaseTime {
     @URL(message = "유효한 URL 형식이어야 합니다.")
     private String fileUrl;
 
-    @Builder
-    public UploadedFile(String fileName, String fileUrl) {
-        this.fileName = fileName;
-        this.fileUrl = fileUrl;
-    }
 }

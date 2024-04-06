@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,13 +35,6 @@ public class Post extends BaseTime {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
-    @Builder
-    public Post(String title, String content, String imageUrl) {
-        this.title = title;
-        this.content = content;
-        this.imageUrl = imageUrl;
-    }
 
     public void update(String title, String content, String imageUrl) {
         this.title = title;
