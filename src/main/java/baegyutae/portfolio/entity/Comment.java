@@ -1,6 +1,5 @@
 package baegyutae.portfolio.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class Comment extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 1000)
+    @NotBlank(message = "댓글 내용은 비어 있을 수 없습니다.")
+    @Size(max = 1000, message = "댓글 내용은 1000자를 초과할 수 없습니다.")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,5 +44,15 @@ public class Comment extends BaseTime {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void assignToPost(Post post) {
+        if (this.post != null) {
+            this.post.getComments().remove(this);
+        }
+        this.post = post;
+        if (!post.getComments().contains(this)) {
+            post.addComment(this);
+        }
     }
 }
