@@ -39,11 +39,7 @@ public class PostController {
         @Valid @RequestPart("postCreateDto") PostCreateDto postCreateDto,
         @RequestPart(value = "file", required = false) MultipartFile file) {
 
-        // 파일이 제공되었는지 확인
-        String imageUrl = null;
-        if (file != null && !file.isEmpty()) {
-            imageUrl = s3Service.uploadFile(file);
-        }
+        String imageUrl = uploadFile(file);
 
         PostCreateDto newPostCreateDto = new PostCreateDto(
             postCreateDto.title(),
@@ -78,9 +74,6 @@ public class PostController {
         @RequestPart(value = "file", required = false) MultipartFile file) {
 
         String imageUrl = null;
-        if (file != null && !file.isEmpty()) {
-            imageUrl = s3Service.uploadFile(file);
-        }
 
         PostUpdateDto updatedPostUpdateDto = new PostUpdateDto(
             postUpdateDto.title(),
@@ -101,5 +94,12 @@ public class PostController {
         @PathVariable Long id) {
         postService.deletePost(id);
         return ResponseEntity.ok(ApiResponse.success());
+    }
+
+    private String uploadFile(MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
+            return s3Service.uploadFile(file);
+        }
+        return null;
     }
 }
