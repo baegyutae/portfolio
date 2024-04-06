@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -41,5 +42,15 @@ public class GlobalExceptionHandler {
         ApiError apiError = new ApiError("로그인 실패", Collections.singletonList(ex.getMessage()));
         ApiResponse<Object> apiResponse = ApiResponse.error(apiError);
         return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<List<String>>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+            .toList();
+
+        ApiResponse<List<String>> response = ApiResponse.error(new ApiError("유효성 검증 오류", errors));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
