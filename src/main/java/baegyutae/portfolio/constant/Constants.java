@@ -5,4 +5,5 @@ public class Constants {
     public static final String USER_NOT_FOUND_ERROR = "사용자를 찾을 수 없습니다.";
     public static final String USER_NOT_FOUND_WITH_USERNAME = "사용자를 찾을 수 없습니다.";
     public static final String USERNAME_OR_EMAIL_ALREADY_IN_USE = "사용자 이름 또는 이메일이 이미 사용 중입니다.";
+    public static final String POST_NOT_FOUND_MSG = "게시글을 찾을 수 없습니다.";
 }
