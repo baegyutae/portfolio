@@ -1,9 +1,17 @@
 package baegyutae.portfolio.service.impl;
 
+import static baegyutae.portfolio.constant.Constants.PASSWORD_MISMATCH_ERROR;
+import static baegyutae.portfolio.constant.Constants.USERNAME_OR_EMAIL_ALREADY_IN_USE;
+import static baegyutae.portfolio.constant.Constants.USER_NOT_FOUND_ERROR;
+import static baegyutae.portfolio.constant.Constants.USER_NOT_FOUND_WITH_USERNAME;
+
 import baegyutae.portfolio.dto.user.SignupRequestDto;
 import baegyutae.portfolio.dto.user.SignupResponseDto;
 import baegyutae.portfolio.dto.user.UserLoginDto;
 import baegyutae.portfolio.entity.User;
+import baegyutae.portfolio.exception.PasswordMismatchException;
+import baegyutae.portfolio.exception.UserNotFoundException;
+import baegyutae.portfolio.exception.UsernameOrEmailAlreadyInUseException;
 import baegyutae.portfolio.repository.UserRepository;
 import baegyutae.portfolio.security.JwtTokenUtil;
 import baegyutae.portfolio.service.UserService;
@@ -27,25 +35,30 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(loginDto.username())
             .map(user -> {
                 if (!passwordEncoder.matches(loginDto.password(), user.getPassword())) {
-                    throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+                    throw new PasswordMismatchException(PASSWORD_MISMATCH_ERROR);
                 }
                 final UserDetails userDetails = loadUserByUsername(loginDto.username());
                 return jwtTokenUtil.generateToken(userDetails);
             })
-            .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_ERROR));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsername(username)
-            .map(user -> new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>()))
-            .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+            .map(user -> new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                new ArrayList<>()))
+            .orElseThrow(() -> new UsernameNotFoundException(
+                String.format(USER_NOT_FOUND_WITH_USERNAME, username)));
     }
 
     @Override
     public SignupResponseDto signupUser(SignupRequestDto signupRequestDto) {
-        if (userRepository.existsByUsername(signupRequestDto.username()) || userRepository.existsByEmail(signupRequestDto.email())) {
-            throw new IllegalStateException("Username or email already in use");
+        if (userRepository.existsByUsername(signupRequestDto.username())
+            || userRepository.existsByEmail(signupRequestDto.email())) {
+            throw new UsernameOrEmailAlreadyInUseException(USERNAME_OR_EMAIL_ALREADY_IN_USE);
         }
 
         User newUser = User.builder()
@@ -56,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(newUser);
 
-        return new SignupResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return new SignupResponseDto(savedUser.getId(), savedUser.getUsername(),
+            savedUser.getEmail());
     }
 }
