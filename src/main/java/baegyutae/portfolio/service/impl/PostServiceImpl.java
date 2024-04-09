@@ -1,6 +1,8 @@
 package baegyutae.portfolio.service.impl;
 
+import baegyutae.portfolio.constant.Constants;
 import baegyutae.portfolio.entity.Post;
+import baegyutae.portfolio.exception.PostNotFoundException;
 import baegyutae.portfolio.repository.PostRepository;
 import baegyutae.portfolio.dto.post.PostCreateDto;
 import baegyutae.portfolio.dto.post.PostResponseDto;
@@ -51,7 +53,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponseDto getPostById(Long id) {
         Post post = postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+            .orElseThrow(() -> new PostNotFoundException(String.format(Constants.POST_NOT_FOUND_MSG, id)));
         return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImageUrl(),
             post.getCreatedAt(), post.getUpdatedAt());
     }
@@ -60,7 +62,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void updatePost(Long id, PostUpdateDto postUpdateDto) {
         Post post = postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Post not found with id: " + id));
+            .orElseThrow(() -> new PostNotFoundException(String.format(Constants.POST_NOT_FOUND_MSG, id)));
         post.update(postUpdateDto.title(), postUpdateDto.content(), postUpdateDto.imageUrl());
     }
 
